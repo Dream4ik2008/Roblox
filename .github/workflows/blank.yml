@@ -1,0 +1,25 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+local flying = false
+
+local function toggleFly()
+    flying = not flying
+    if flying then
+        local flyForce = Instance.new("BodyVelocity")
+        flyForce.Velocity = Vector3.new(0, 50, 0) -- Задаёт скорость подъёма
+        flyForce.MaxForce = Vector3.new(10000, 10000, 10000)
+        flyForce.Parent = character.HumanoidRootPart
+    else
+        if character.HumanoidRootPart:FindFirstChild("BodyVelocity") then
+            character.HumanoidRootPart.BodyVelocity:Destroy()
+        end
+    end
+end
+
+game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.F then
+        toggleFly()
+    end
+end)
